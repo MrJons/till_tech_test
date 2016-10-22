@@ -1,10 +1,9 @@
 require 'rubygems'
 require 'json'
-# require_relative '../hipstercoffee.json'
 
 class MenuParser
 
-  def initialize(cafe_file = 'hipstercoffee.json')
+  def initialize(cafe_file)
     json = File.read(cafe_file)
     @data_hash = JSON.parse(json)
   end

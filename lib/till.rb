@@ -1,26 +1,25 @@
-require_relative 'menu_parser'
+require_relative 'menu'
+# require_relative 'item'
+require_relative 'order'
+require_relative 'receipt'
 
 class Till
 
-  JSON_ARRAY_CONST = 0
+  JSON_BLOCK = 0
 
   def initialize(cafe = 'hipstercoffee.json')
-    info = MenuParser.new(cafe)
-    @cafe_deets = info.data_hash[JSON_ARRAY_CONST]
-    @menu = info.data_hash[JSON_ARRAY_CONST]['prices'][JSON_ARRAY_CONST]
-    @order = []
+    @menu = Menu.new(cafe)
+    @order = Order.new
   end
 
 
   def print_menu
-    menu.each do |item, price|
-      puts "#{item}: £#{price}"
-    end
+    @menu.print_menu
   end
 
   def add_item(item, quantity = 1)
-    fail "That item does not exist" if !menu.has_key?(item)
-    @order << [item, quantity]
+    fail "That item does not exist" if !@menu.menu_items.has_key?(item)
+    @order.contents << [item, quantity]
   end
 
   def print_receipt
@@ -52,11 +51,11 @@ class Till
     puts "Total: #{'%.2f' % @total}"
   end
 
-  def menu_footer
-    puts "-----------------"
-    puts "Thank you for eating @ #{@cafe_deets['shopName']}"
-    puts ""
-  end
+  # def menu_footer
+  #   puts "-----------------"
+  #   puts "Thank you for eating @ #{@cafe_deets['shopName']}"
+  #   puts ""
+  # end
   # private
 
   attr_reader :menu, :order, :total, :info, :cafe_deets
